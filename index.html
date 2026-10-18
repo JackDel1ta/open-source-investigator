@@ -4,93 +4,151 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TRACE — OSINT Search</title>
+<title>TRACE — OSINT</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#090d16;color:#e9eefb;font-family:Arial,sans-serif}
-main{max-width:850px;margin:65px auto;padding:22px}
-.logo{color:#62e6bc;font-size:13px;letter-spacing:5px;font-weight:bold}
-h1{font-size:clamp(35px,8vw,62px);margin:20px 0 10px}
+body{margin:0;background:#090d16;color:#edf2ff;font-family:Arial,sans-serif}
+main{max-width:850px;margin:35px auto;padding:22px}
+.logo{color:#62e6bc;letter-spacing:5px;font-weight:bold}
+h1{font-size:48px;margin-bottom:8px}
 h1 span{color:#62e6bc}
-p{color:#9daac1;line-height:1.6}
-.search{display:flex;gap:10px;margin:30px 0 12px}
-input{min-width:0;flex:1;background:#121a2a;border:1px solid #29354b;border-radius:10px;padding:16px;color:white;font-size:16px}
-button{background:#62e6bc;color:#07130f;border:0;border-radius:10px;padding:0 22px;font-weight:bold;cursor:pointer}
-button:hover{background:#8cf5d3}
-.note{font-size:12px}
-h2{font-size:17px;margin-top:35px}
-.sources{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
-.card{display:block;padding:18px;background:#111827;border:1px solid #253047;border-radius:12px;color:#e9eefb;text-decoration:none}
-.card:hover{border-color:#62e6bc}
+p,.muted{color:#9daac1;line-height:1.6}
+label{display:block;margin:18px 0 8px;font-weight:bold}
+input,select{width:100%;padding:15px;background:#121a2a;border:1px solid #303b52;border-radius:10px;color:white;font-size:16px}
+button{padding:15px;background:#62e6bc;border:0;border-radius:10px;font-weight:bold;font-size:16px;cursor:pointer}
+.searchbtn{width:100%;margin-top:18px}
+.card{display:block;padding:18px;margin:12px 0;background:#121a2a;border:1px solid #303b52;border-radius:12px;color:#edf2ff;text-decoration:none}
 .card b{display:block;margin-bottom:8px}
 .card small{color:#9daac1}
-#results{display:none;margin-top:28px}
-footer{margin-top:50px;color:#68758b;font-size:12px}
-@media(max-width:500px){main{margin:30px auto}.search{flex-direction:column}button{padding:16px}}
+#results{margin-top:30px}
+.notice{font-size:13px}
+footer{margin-top:40px;color:#738098;font-size:12px}
 </style>
 </head>
 <body>
 <main>
 <div class="logo">T / R / A / C / E</div>
-<h1>Найди то,<br>что <span>открыто.</span></h1>
-<p>Поиск по публичным источникам в одном месте.<br>Введи имя, фамилию или никнейм человека.</p>
+<h1>Поиск <span>OSINT.</span></h1>
+<p>Ищи публичные сведения в открытых источниках.</p>
 
-<form class="search" id="searchForm">
-<input id="query" placeholder="Имя или никнейм..." required>
-<button type="submit">Искать ↗</button>
-</form>
-<p class="note">TRACE открывает поисковые запросы. Результаты зависят от выбранного источника.</p>
+<form id="form">
+<label for="mode">Тип поиска</label>
+<select id="mode">
+<option value="name">ФИО</option>
+<option value="social">Никнейм в соцсети</option>
+<option value="phone">Номер телефона</option>
+</select>
 
-<section id="results">
-<h2 id="resultTitle">Результаты поиска</h2>
-<div class="sources" id="links"></div>
-</section>
-
-<h2>Открытые источники</h2>
-<div class="sources">
-<a class="card" href="https://www.google.com/" target="_blank" rel="noopener"><b>Google Search ↗</b><small>Публичные страницы, статьи и сайты</small></a>
-<a class="card" href="https://duckduckgo.com/" target="_blank" rel="noopener"><b>DuckDuckGo ↗</b><small>Альтернативный поиск в интернете</small></a>
-<a class="card" href="https://www.bing.com/" target="_blank" rel="noopener"><b>Bing ↗</b><small>Веб-страницы и публикации</small></a>
-<a class="card" href="https://search.openalex.org/" target="_blank" rel="noopener"><b>OpenAlex ↗</b><small>Научные публикации и авторы</small></a>
-<a class="card" href="https://www.opensanctions.org/" target="_blank" rel="noopener"><b>OpenSanctions ↗</b><small>Публичные санкционные и связанные с ними данные</small></a>
-<a class="card" href="https://haveibeenpwned.com/" target="_blank" rel="noopener"><b>Have I Been Pwned ↗</b><small>Проверка собственного адреса электронной почты на известные утечки</small></a>
+<div id="networkBox" hidden>
+<label for="network">Социальная сеть</label>
+<select id="network">
+<option value="instagram.com">Instagram</option>
+<option value="tiktok.com">TikTok</option>
+<option value="t.me">Telegram</option>
+<option value="vk.com">ВКонтакте</option>
+<option value="youtube.com">YouTube</option>
+<option value="github.com">GitHub</option>
+<option value="x.com">X</option>
+</select>
 </div>
 
-<footer>TRACE · OSINT toolkit · Только открытые и разрешённые источники</footer>
+<label for="query" id="queryLabel">Имя и фамилия</label>
+<input id="query" placeholder="Введи данные для поиска" required>
+<button class="searchbtn" type="submit">Найти в открытых источниках ↗</button>
+</form>
+
+<p class="notice">TRACE открывает поисковые запросы. Это не поиск по закрытым базам и не автоматическое подтверждение личности.</p>
+
+<section id="results" hidden>
+<h2>Источники для проверки</h2>
+<p id="summary"></p>
+<div id="links"></div>
+</section>
+
+<footer>TRACE · Поиск по общедоступным источникам</footer>
 </main>
+
 <script>
-const form=document.getElementById('searchForm');
-const input=document.getElementById('query');
+const mode=document.getElementById('mode');
+const networkBox=document.getElementById('networkBox');
+const queryLabel=document.getElementById('queryLabel');
+const query=document.getElementById('query');
+const form=document.getElementById('form');
 const results=document.getElementById('results');
 const links=document.getElementById('links');
 
-const engines=[
-['Google','https://www.google.com/search?q='],
-['DuckDuckGo','https://duckduckgo.com/?q='],
-['Bing','https://www.bing.com/search?q=']
-];
-
-form.addEventListener('submit',function(event){
-event.preventDefault();
-const q=input.value.trim();
-if(!q)return;
-links.replaceChildren();
-engines.forEach(function(engine){
-const a=document.createElement('a');
-a.className='card';
-a.href=engine[1]+encodeURIComponent('"'+q+'"');
-a.target='_blank';
-a.rel='noopener noreferrer';
-const b=document.createElement('b');
-b.textContent=engine[0]+' ↗';
-const small=document.createElement('small');
-small.textContent='Искать: '+q;
-a.append(b,small);
-links.appendChild(a);
+mode.addEventListener('change',()=>{
+ networkBox.hidden=mode.value!=='social';
+ if(mode.value==='name'){
+  queryLabel.textContent='Имя и фамилия';
+  query.placeholder='Например, Иван Иванов';
+ }else if(mode.value==='social'){
+  queryLabel.textContent='Никнейм';
+  query.placeholder='Например, username';
+ }else{
+  queryLabel.textContent='Номер телефона';
+  query.placeholder='Введи номер в международном формате';
+ }
 });
-document.getElementById('resultTitle').textContent='Поиск: '+q;
-results.style.display='block';
-results.scrollIntoView({behavior:'smooth',block:'start'});
+
+form.addEventListener('submit',event=>{
+ event.preventDefault();
+ const value=query.value.trim();
+ if(!value)return;
+ let q=value;
+ let targets=[];
+
+ if(mode.value==='social'){
+  const site=document.getElementById('network').value;
+  q=value.replace(/^@/,'');
+  targets=[
+   ['Поиск профиля на выбранной платформе',
+    'https://www.google.com/search?q='+encodeURIComponent('site:'+site+' "'+q+'"')],
+   ['Поиск упоминаний никнейма',
+    'https://www.google.com/search?q='+encodeURIComponent('"'+q+'"')],
+   ['DuckDuckGo',
+    'https://duckduckgo.com/?q='+encodeURIComponent('"'+q+'"')]
+  ];
+ }else if(mode.value==='phone'){
+  targets=[
+   ['Google — публичные упоминания',
+    'https://www.google.com/search?q='+encodeURIComponent('"'+q+'"')],
+   ['Bing — публичные упоминания',
+    'https://www.bing.com/search?q='+encodeURIComponent('"'+q+'"')],
+   ['DuckDuckGo',
+    'https://duckduckgo.com/?q='+encodeURIComponent('"'+q+'"')]
+  ];
+ }else{
+  targets=[
+   ['Google — точное совпадение',
+    'https://www.google.com/search?q='+encodeURIComponent('"'+q+'"')],
+   ['Bing',
+    'https://www.bing.com/search?q='+encodeURIComponent('"'+q+'"')],
+   ['DuckDuckGo',
+    'https://duckduckgo.com/?q='+encodeURIComponent('"'+q+'"')],
+   ['OpenAlex — научные публикации',
+    'https://search.openalex.org/works?search='+encodeURIComponent(q)]
+  ];
+ }
+
+ links.replaceChildren();
+ targets.forEach(item=>{
+  const a=document.createElement('a');
+  a.className='card';
+  a.href=item[1];
+  a.target='_blank';
+  a.rel='noopener noreferrer';
+  const b=document.createElement('b');
+  b.textContent=item[0]+' ↗';
+  const small=document.createElement('small');
+  small.textContent='Открыть поисковый запрос';
+  a.append(b,small);
+  links.append(a);
+ });
+ document.getElementById('summary').textContent=
+  'Запрос: '+value+'. Открой источники и проверь, относятся ли результаты к нужному человеку.';
+ results.hidden=false;
+ results.scrollIntoView({behavior:'smooth'});
 });
 </script>
 </body>
